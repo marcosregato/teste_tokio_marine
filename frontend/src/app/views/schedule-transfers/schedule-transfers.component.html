@@ -1,0 +1,99 @@
+<app-header></app-header>
+<main>
+  <div class="container mt-5 d-flex justify-content-center align-items-center">
+    <form
+      [formGroup]="transferForm"
+      (ngSubmit)="scheduleTransfer()"
+      class="bg-light p-4 rounded shadow-sm text-center"
+    >
+      <h1 class="mb-4">Agendamento de Transferência</h1>
+      <div class="mb-3">
+        <label for="originAccount" class="form-label">Conta de Origem</label>
+        <input
+          type="text"
+          class="form-control"
+          id="originAccount"
+          formControlName="originAccount"
+          placeholder="Digite o número da conta de origem"
+          maxlength="10"
+        />
+        <div
+          *ngIf="transferForm.get('originAccount')?.hasError('pattern')"
+          class="text-danger"
+        >
+          A conta deve ter 10 dígitos.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="destinationAccount" class="form-label">
+          Conta de Destino
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="destinationAccount"
+          formControlName="destinationAccount"
+          placeholder="Digite o número da conta de destino"
+          maxlength="10"
+        />
+        <div
+          *ngIf="transferForm.get('destinationAccount')?.hasError('pattern')"
+          class="text-danger"
+        >
+          A conta deve ter 10 dígitos.
+        </div>
+      </div>
+      <div *ngIf="transferForm.hasError('sameAccount')" class="text-danger">
+        As contas de origem e destino não podem ser iguais.
+      </div>
+      <div class="mb-3">
+        <label for="transferAmount" class="form-label">Valor</label>
+        <input
+          type="text"
+          formControlName="transferAmount"
+          class="form-control text-center"
+          id="transferAmount"
+          formControlName="transferAmount"
+          currencyMask
+          [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
+        />
+        <div
+          *ngIf="transferForm.get('transferAmount')?.hasError('pattern')"
+          class="text-danger"
+        >
+          O valor digitado é invalido
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="transferDate" class="form-label"
+          >Data da transferência
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="transferDate"
+          formControlName="transferDate"
+          bsDatepicker
+          [(bsValue)]="transferDate"
+          [bsConfig]="{
+            containerClass: 'theme-default',
+            dateInputFormat: 'DD/MM/YYYY',
+          }"
+          placeholder="Escolha uma data"
+        />
+        <div
+          *ngIf="transferForm.get('transferDate')?.hasError('invalidDate')"
+          class="text-danger"
+        >
+          A data deve estar entre hoje e 50 dias no futuro.
+        </div>
+      </div>
+      <button class="mx-3 btn btn-danger" [routerLink]="'/'">Cancelar</button>
+      <button type="submit" class="btn btn-success">
+        Agendar Transferência
+      </button>
+    </form>
+  </div>
+</main>
+<app-footer></app-footer>
